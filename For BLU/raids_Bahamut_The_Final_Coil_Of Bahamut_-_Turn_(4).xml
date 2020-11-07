@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<timeline>
+	<name>For BLU: The Final Coil Of Bahamut - Turn (4)</name>
+	<rev>rev1</rev>
+	<description>青魔用の大迷宮バハムート：真成編4</description>
+	<author>いりす#0573</author>
+	<license>CC BY-SA</license>
+	<zone>The Final Coil Of Bahamut - Turn (4)</zone>
+	<locale>JA</locale>
+	
+	@if (Model.Player.InJob("BLU")) {
+	<t text="頭割り" sync="^1B:[id8]:[mex]:0000:[id4]:0027:0000:0000:0000:" notice="頭割り。" />
+	<t text="アースシェイカー" sync="^1B:[id8]:[mex]:0000:[id4]:0028:0000:0000:0000:" notice="アースシェイカー。" />
+	}
+	
+</timeline>

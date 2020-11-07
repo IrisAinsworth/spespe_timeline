@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<timeline>
+	<name>For BLU: the Binding Coil of Bahamut - Turn (5)</name>
+	<rev>rev1</rev>
+	<description>青魔用の大迷宮バハムート：邂逅編5</description>
+	<author>いりす#0573</author>
+	<license>CC BY-SA</license>
+	<zone>the Binding Coil of Bahamut - Turn (5)</zone>
+	<locale>JA</locale>
+	
+	@if (Model.Player.InJob("BLU")) {
+	<t text="ファイアストーム" sync="^15:[id8]:ツインタニア:5AB:ファイアストーム:[id8]:[mex]:" notice="足元。" sync-count="1" />
+	<t text="ファイアボール" sync="^15:[id8]:ツインタニア:5AC:ファイアボール:[id8]:[mex]:" notice="硬化。" sync-count="1" />
+	<t text="ツイスター" sync="ツインタニアは「ツイスター」の構え。" notice="ツイスター。" sync-count="1" />
+	}
+	
+</timeline>

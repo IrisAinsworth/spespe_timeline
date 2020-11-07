@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<timeline>
+	<!-- 
+	  ギミック処理等は、下記のブログ記事を参考にした
+	  https://blog.lariceworks.net/archives/381
+
+	  最後の審判のデバフ付与とスチームジャッジPopは順不同のため、処理が複雑化している
+	  タイムライン作成当時は存在しなかったが、dumpタグ等を用いると、もう少し綺麗に書けるかも (?)
+
+	  仮判決およびスチームジャッジのαβ判別部分は、動作未確認
+	  そのため、正しく動かないと思われる
+	  （試行錯誤する前にクリアしてしまったので、そのままとなっている）
+	-->
+	
+	<name>For BLU: 機工城アレキサンダー零式：律動編4</name>
+	<rev>rev3</rev>
+	<description>青魔用の機工城アレキサンダー零式：律動編4</description>
+	<author>いりす#0573</author>
+	<license>CC BY-SA</license>
+	<zone>Alexander - The Burden Of The Son (Savage)</zone>
+	<locale>JA</locale>
+
+	@if (Model.Player.InJob("BLU")) {
+	<entry>empty</entry>
+	<start>警報:コンバットシステム再起動……</start>
+	<s name="empty"></s>
+
+	<!-- 変数の初期化 -->
+	<t sync="0039:戦闘開始！">
+		<expressions>
+			<set name="west_alpha" value="false" />
+			<set name="west_beta"  value="false" />
+			<set name="east_alpha" value="false" />
+			<set name="east_beta"  value="false" />
+			<set name="debuff_alpha" value="false" />
+			<set name="debuff_beta"  value="false" />
+			<!-- 判別できなかった用の初期値 -->
+			<set name="notice_steam_regulator" value="スチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Cross" />
+		</expressions>
+	</t>
+	<t text="高い方へ" sync="[mex]に「算術：ハイト1」の効果。" notice="高い方へ" />
+	<t text="低い方へ" sync="[mex]に「算術：ハイト2」の効果。" notice="低い方へ" />
+	<t text="沈黙 ➜ ブラスター" sync="「マインドブラスト」の構え。" notice="沈黙" />
+	<t text="スーパーサイクロン" sync="ボルテッカーは「スーパーサイクロン」の構え。" notice="ノックバック。" />
+	<t text="赤玉" sync="[mex]に「マーキング」の効果。" notice="赤玉" />
+	<t text="頭割り" sync="^1B:[id8]:[mex]:0000:[id4]:003E:0000:0000:0000:" notice="頭割り" />
+	<t text="メガビーム" sync="「メガビーム」の構え。" notice="メガビーム。" />
+	<t text="挑発" sync="「ジャスティス合神」の構え。" notice="ヒールを受けてから挑発。" />
+	<t text="雷属性圧縮 \n➜ ${_pc}" sync="[pc]に「雷属性圧縮」の効果。">
+		<v-notice duration="21" icon="share" duration-visible="false" />
+	</t>
+
+	<!-- スチームジャッジPop ➜ デバフ付与 -->
+	<t no="21" text="西β 東α">
+		<p-sync interval="30">
+			<combatant name="スチームジャッジα" X="21.86" Y="21.50" tolerance="0.05" />
+			<combatant name="スチームジャッジβ" X="21.14" Y="21.50" tolerance="0.05" />
+		</p-sync>
+		<expressions>
+			<set name="west_beta"  value="true" ttl="15" />
+			<set name="east_alpha" value="true" ttl="15" />
+			<pre name="debuff_alpha" value="false" />
+			<pre name="debuff_beta"  value="false" />
+		</expressions>
+	</t>
+	<t no="22" text="西β 東α">
+		<p-sync interval="30">
+			<combatant name="スチームジャッジβ" X="21.86" Y="21.50" tolerance="0.05" />
+			<combatant name="スチームジャッジα" X="21.14" Y="21.50" tolerance="0.05" />
+		</p-sync>
+		<expressions>
+			<set name="west_alpha" value="true" ttl="15" />
+			<set name="east_beta"  value="true" ttl="15" />
+			<pre name="debuff_alpha" value="false" />
+			<pre name="debuff_beta"  value="false" />
+		</expressions>
+	</t>
+	<!-- デバフ付与[α] ➜ スチームジャッジPop -->
+	<t no="23" text="西β 東α">
+		<p-sync interval="30">
+			<combatant name="スチームジャッジα" X="21.86" Y="21.50" tolerance="0.05" />
+			<combatant name="スチームジャッジβ" X="21.14" Y="21.50" tolerance="0.05" />
+		</p-sync>
+		<expressions>
+			<pre name="debuff_alpha" value="true" />
+			<set name="notice_steam_regulator" value="東のスチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Arrow3" />
+		</expressions>
+	</t>
+	<t no="24" text="西β 東α">
+		<p-sync interval="30">
+			<combatant name="スチームジャッジβ" X="21.86" Y="21.50" tolerance="0.05" />
+			<combatant name="スチームジャッジα" X="21.14" Y="21.50" tolerance="0.05" />
+		</p-sync>
+		<expressions>
+			<pre name="debuff_alpha" value="true" />
+			<set name="notice_steam_regulator" value="西のスチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Arrow7" />
+		</expressions>
+	</t>
+	<!-- デバフ付与[β] ➜ スチームジャッジPop -->
+	<t no="25" text="西β 東α">
+		<p-sync interval="30">
+			<combatant name="スチームジャッジα" X="21.86" Y="21.50" tolerance="0.05" />
+			<combatant name="スチームジャッジβ" X="21.14" Y="21.50" tolerance="0.05" />
+		</p-sync>
+		<expressions>
+			<pre name="debuff_beta" value="true" />
+			<set name="notice_steam_regulator" value="西のスチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Arrow7" />
+		</expressions>
+	</t>
+	<t no="26" text="西β 東α">
+		<p-sync interval="30">
+			<combatant name="スチームジャッジβ" X="21.86" Y="21.50" tolerance="0.05" />
+			<combatant name="スチームジャッジα" X="21.14" Y="21.50" tolerance="0.05" />
+		</p-sync>
+		<expressions>
+			<pre name="debuff_beta" value="true" />
+			<set name="notice_steam_regulator" value="東のスチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Arrow3" />
+		</expressions>
+	</t>
+
+	<!-- 結審タイムラインロード用トリガー -->
+	<t no="1" text="HP最大＆体罰4"	sync="[mex]に「最後の審判：HP最大」の効果。">
+		<load target="HP最大" truncate="true" />
+	</t>
+	<t no="2" text="HP最小＆体罰4"	sync="[mex]に「最後の審判：HP最小」の効果。">
+		<load target="HP最小" truncate="true" />
+	</t>
+	<t no="3" text="デバフ1＆体罰3" sync="[mex]に「最後の審判：デバフ1」の効果。">
+		<load target="デバフ1" truncate="true" />
+	</t>
+	<t no="4" text="デバフ2＆体罰1" sync="[mex]に「最後の審判：デバフ2」の効果。">
+		<load target="デバフ2" truncate="true" />
+	</t>
+	<t no="5" text="デバフ3＆体罰2" sync="[mex]に「最後の審判：デバフ3」の効果。">
+		<load target="デバフ3" truncate="true" />
+	</t>
+	<!-- デバフ付与 ➜ スチームジャッジPop -->
+	<t no="6" text="仮判決α＆体罰1" sync="[mex]に「最後の審判：仮判決α」の効果。" notice="α">
+		<expressions>
+			<set name="debuff_alpha" value="true" ttl="40" />
+			<pre name="west_alpha"  value="false" />
+			<pre name="east_alpha"  value="false" />
+			<pre name="west_beta"   value="false" />
+			<pre name="east_beta"   value="false" />
+		</expressions>
+		<load target="仮判決α" truncate="true" />
+	</t>
+	<t no="7" text="仮判決β＆体罰1" sync="[mex]に「最後の審判：仮判決β」の効果。" notice="β">
+		<expressions>
+			<set name="debuff_beta"  value="true" ttl="40" />
+			<pre name="west_alpha"  value="false" />
+			<pre name="east_alpha"  value="false" />
+			<pre name="west_beta"   value="false" />
+			<pre name="east_beta"   value="false" />
+		</expressions>
+		<load target="仮判決β" truncate="true" />
+	</t>
+	<!-- スチームジャッジPop ➜ デバフ付与 -->
+	<t no="8" text="仮判決α＆体罰1" sync="[mex]に「最後の審判：仮判決α」の効果。" notice="α">
+		<expressions>
+			<pre name="west_alpha"  value="true" />
+			<set name="notice_steam_regulator" value="西のスチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Arrow7" />
+		</expressions>
+		<load target="仮判決α" truncate="true" />
+	</t>
+	<t no="9" text="仮判決α＆体罰1" sync="[mex]に「最後の審判：仮判決α」の効果。" notice="α">
+		<expressions>
+			<pre name="east_alpha"  value="true" />
+			<set name="notice_steam_regulator" value="東のスチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Arrow3" />
+		</expressions>
+		<load target="仮判決α" truncate="true" />
+	</t>
+	<t no="10" text="仮判決β＆体罰1" sync="[mex]に「最後の審判：仮判決β」の効果。" notice="β">
+		<expressions>
+			<pre name="east_beta"   value="true" />
+			<set name="notice_steam_regulator" value="東のスチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Arrow3" />
+		</expressions>
+		<load target="仮判決β" truncate="true" />
+	</t>
+	<t no="11" text="仮判決β＆体罰1" sync="[mex]に「最後の審判：仮判決β」の効果。" notice="β">
+		<expressions>
+			<pre name="west_beta"   value="true" />
+			<set name="notice_steam_regulator" value="西のスチームジャッジを倒す" />
+			<set name="notice_steam_regulator_icon" value="Arrow7" />
+		</expressions>
+		<load target="仮判決β" truncate="true" />
+	</t>
+
+	<!-- 結審の役割別タイムライン -->
+	<s name="HP最大">
+		<a time="000" text="タゲを取る" notice="最大、迅速ホワイトウィンド。" />
+		<a time="003" text="そのままタゲを取る" notice="そのまま、ホワイトウィンド連打。" />
+		<a time="026" text="最後の審判：結審" sync="「最後の審判：結審」の構え。" sync-s="-10" sync-e="10" notice="捕食" />
+		<!--<t text="結審" sync="「最後の審判：結審」の構え。" notice="捕食" />-->
+	</s>
+	<s name="HP最小">
+		<a time="000" text="左下の玉を取る" notice="最小、左下の玉を取る" icon="Arrow6">
+			<v-notice text="左下の玉を取る" icon="Arrow6" duration="5" sync-to-hide="スチームガスケットは「爆散」の構え。" />
+		</a>
+		<t sync="スチームガスケットは「爆散」の構え。" sync-count="1" sync-interval="2" notice="左上の玉を取る">
+			<v-notice text="左上の玉を取る" icon="Arrow8" duration="5" sync-to-hide="スチームガスケットは「爆散」の構え。" />
+		</t>
+		<t sync="スチームガスケットは「爆散」の構え。" sync-count="2" sync-interval="2" notice="右上の玉を取る">
+			<v-notice text="右上の玉を取る" icon="Arrow2" duration="5" sync-to-hide="スチームガスケットは「爆散」の構え。" />
+		</t>
+		<a time="026" text="結審直前に、右上の竜巻に入る" sync="「最後の審判：結審」の構え。" sync-s="-10" sync-e="10" notice="右上の竜巻に入る" icon="Arrow2">
+			<v-notice text="右上の竜巻に入る" icon="Arrow2" duration="5" sync-to-hide="[mex]に「最後の風葬」の効果。" />
+		</a>
+	</s>
+	<s name="デバフ1">
+		<a time="000" text="左下の玉の範囲に入る" notice="デバフ1、左下の玉の範囲に入る" icon="Arrow6">
+			<v-notice text="左下の玉の範囲に入る" icon="Arrow6" duration="5" sync-to-hide="スチームガスケットは「爆散」の構え。" />
+		</a>
+		<t sync="スチームガスケットは「爆散」の構え。" sync-count="1" sync-interval="2" notice="左上の玉の範囲に入る">
+			<v-notice text="左上の玉の範囲に入る" icon="Arrow8" duration="5" sync-to-hide="スチームガスケットは「爆散」の構え。" />
+		</t>
+		<t sync="スチームガスケットは「爆散」の構え。" sync-count="2" sync-interval="2" notice="右上の玉の範囲に入る">
+			<v-notice text="右上の玉の範囲に入る" icon="Arrow2" duration="5" sync-to-hide="スチームガスケットは「爆散」の構え。" />
+		</t>
+	</s>
+	<s name="デバフ2">
+		<a time="000" text="左上の竜巻に入る" notice="デバフ2、左上の竜巻に入る" icon="Arrow8">
+			<v-notice text="左上の竜巻に入る" icon="Arrow8" duration="25" sync-to-hide="[mex]に「最後の風葬」の効果。" />
+		</a>
+		<t sync="[mex]に「最後の風葬」の効果。" notice="マイティガードを切る">
+			<v-notice text="マイティガードを切る" duration="15" sync-to-hide="[mex]の「マイティガード」が切れた。" />
+		</t>
+		<t sync="[mex]の「マイティガード」が切れた。" notice="結審まで、ホワイトウィンド">
+			<v-notice text="結審まで、ホワイトウィンド" duration="15" sync-to-hide="「最後の審判：結審」の構え。" />
+		</t>
+		<a time="026" text="結審まで、ホワイトウィンド" sync="「最後の審判：結審」の構え。" sync-s="-10" sync-e="10" />
+	</s>
+	<s name="デバフ3">
+		<a time="000" text="南側のどちらかの竜巻に入る" notice="デバフ3、南側のどちらかの竜巻に入る" icon="Arrow5">
+			<v-notice text="南側のどちらかの竜巻に入る" icon="Arrow6" duration="15" sync-to-hide="[mex]に「最後の風葬」の効果。" />
+		</a>
+		<a time="026" text="結審後、右下の玉を2人で取る" sync="「最後の審判：結審」の構え。" sync-s="-10" sync-e="10" notice="結審後、右下の玉を2人で取る" icon="Arrow2">
+			<v-notice text="結審後、右下の玉を2人で取る" icon="Arrow2" duration="5" sync-to-hide="[mex]に「最後の風葬」の効果。" />
+		</a>
+		<t sync="ブルートジャスティスの「最後の審判：結審」" notice="玉を取る" />
+	</s>
+	<s name="仮判決α">
+		<a time="000" text="マイティガードを切る" notice="マイティガードを切る">
+			<v-notice text="マイティガードを切る" duration="15" sync-to-hide="[mex]の「マイティガード」が切れた。" />
+		</a>
+		<a time="002" text="VAR['notice_steam_regulator']">
+			<v-notice text="VAR['notice_steam_regulator']" icon="VAR['notice_steam_regulator_icon']" duration="15" sync-to-hide="[mex]は、スチームジャッジαを倒した。" />
+		</a>
+		<t sync="[mex]は、スチームジャッジαを倒した。" notice="マイティガードを入れて、北側の玉の範囲に入る" >
+			<v-notice text="マイティガード" icon="Arrow1" duration="15" sync-to-hide="[mex]に「マイティガード」の効果。" />
+			<v-notice text="北の玉の範囲に入る" icon="Arrow1" duration="15" sync-to-hide=":スチームガスケット:1630:爆散:[id8]:[mex]:" />
+		</t>
+	</s>
+	<s name="仮判決β">
+		<a time="000" text="マイティガードを切る" notice="マイティガードを切る">
+			<v-notice text="マイティガードを切る" duration="15" sync-to-hide="[mex]の「マイティガード」が切れた。" />
+		</a>
+		<a time="004" text="VAR['notice_steam_regulator']">
+			<v-notice text="VAR['notice_steam_regulator']" icon="VAR['notice_steam_regulator_icon']" duration="15" sync-to-hide="[mex]は、スチームジャッジβを倒した。" />
+		</a>
+		<t sync="[mex]は、スチームジャッジβを倒した。" notice="マイティガードを入れて、北側の玉の範囲に入る" >
+			<v-notice text="マイティガード" icon="Arrow1" duration="15" sync-to-hide="[mex]に「マイティガード」の効果。" />
+			<v-notice text="北の玉の範囲に入る" icon="Arrow1" duration="15" sync-to-hide=":スチームガスケット:1630:爆散:[id8]:[mex]:" />
+		</t>
+	</s>
+	}
+</timeline>

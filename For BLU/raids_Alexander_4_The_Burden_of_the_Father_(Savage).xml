@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<timeline>
+	<name>For BLU: 機工城アレキサンダー零式：起動編4</name>
+	<rev>rev1</rev>
+	<description>青魔用の機工城アレキサンダー零式：起動編4</description>
+	<author>いりす#0573</author>
+	<license>CC BY-SA</license>
+	<zone>Alexander - The Burden of the Father (Savage)</zone>
+	<locale>JA</locale>
+
+	<t text="左後主脚" sync="左後主脚の「スタン無効」が切れた。" notice="右奥">
+		<v-notice duration="20" icon="Arrow2" duration-visible="false" sync-to-hide="左後主脚に「スタン無効」の効果。" />
+	</t>
+	<t text="左前主脚" sync="左前主脚の「スタン無効」が切れた。" notice="右手前">
+		<v-notice duration="20" icon="Arrow4" duration-visible="false" sync-to-hide="左前主脚に「スタン無効」の効果。" />
+	</t>
+	<t text="右後主脚" sync="右後主脚の「スタン無効」が切れた。" notice="左奥">
+		<v-notice duration="20" icon="Arrow8" duration-visible="false" sync-to-hide="右後主脚に「スタン無効」の効果。" />
+	</t>
+	<t text="右前主脚" sync="右前主脚の「スタン無効」が切れた。" notice="左手前">
+		<v-notice duration="20" icon="Arrow6" duration-visible="false" sync-to-hide="右前主脚に「スタン無効」の効果。" />
+	</t>
+</timeline>

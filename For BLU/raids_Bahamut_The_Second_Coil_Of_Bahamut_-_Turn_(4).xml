@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<timeline>
+	<name>For BLU: The Second Coil Of Bahamut - Turn (4)</name>
+	<rev>rev1</rev>
+	<description>青魔用の大迷宮バハムート：侵攻編4</description>
+	<author>いりす#0573</author>
+	<license>CC BY-SA</license>
+	<zone>The Second Coil Of Bahamut - Turn (4)</zone>
+	<locale>JA</locale>
+
+	@if (Model.Player.InJob("BLU")) {
+	<t text="サーミオニックビーム" sync="^1B:[id8]:[mex]:0000:[id4]:000F:0000:0000:0000:" notice="サーミオニックビーム。" />
+	<t text="天地崩壊" sync="「天地崩壊」の構え。" notice="堅実魔。" />
+	<t text="ダイナモ" sync="「ルナダイナモ」の構え。" notice="足元へ。" />
+	<t text="チャリオット" sync="「アイアンチャリオット」の構え。" notice="離れる。" />
+	<t text="サンダーウィング" sync="[mex]に「サンダーウィング」の効果。" notice="サンダーウィング。" />
+	}
+
+</timeline>
